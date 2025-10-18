@@ -1,25 +1,30 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router";
-import Login from "../screens/auth/Login";
-import Signup from "../screens/auth/Signup";
-import PageNotFound from "../common/PageNotFound";
-import ForgotPassword from "../screens/auth/ForgotPassword";
-import { Home } from "../screens/home/Home";
-import PrivateRoute from "../routing/PrivateRoute"
-
+import Login from "../pages/auth/Login";
+import Signup from "../pages/auth/Signup";
+import PageNotFound from "../components/common/PageNotFound";
+import ForgotPassword from "../pages/auth/ForgotPassword";
+import { Home } from "../pages/home/Home";
+import PrivateRoute from "./PrivateRoute";
+import ConfirmEmail from "../pages/auth/ConfirmEmail";
 
 export default function Routing() {
   return (
-    <div>
-      <Router>
-        <Routes>
-          {/* Public Routes */}
-          <Route path="/" element={<PrivateRoute>  <Home /> </PrivateRoute>} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Signup />} />
-          <Route path="/forgot-password" element={<ForgotPassword />} />
-          <Route path="*" element={<PageNotFound />} />
-        </Routes>
-      </Router>
-    </div>
+    <Router>
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <PrivateRoute>
+              <Home />
+            </PrivateRoute>
+          }
+        />
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/confirm-email" element={<ConfirmEmail />} />
+        <Route path="*" element={<PageNotFound />} />
+      </Routes>
+    </Router>
   );
 }
