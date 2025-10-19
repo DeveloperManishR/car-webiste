@@ -8,9 +8,13 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 const loginSchema = z.object({
-  email: z.email({ message: "Invalid email address" }),
+  email: z
+    .string()
+    .nonempty({ message: "Email is required" })
+    .email({ message: "Invalid email address" }),
   password: z
     .string()
+    .nonempty({ message: "Password is required" })
     .min(6, { message: "Password must be at least 6 characters" }),
 });
 
@@ -28,7 +32,7 @@ export default function LoginPage() {
   const handleSubmit = (data) => {
     console.log("Form submitted", data);
     // ✅ Add login logic or navigate after successful login
-    // navigate("/dashboard");
+    navigate("/");
   };
 
   return (

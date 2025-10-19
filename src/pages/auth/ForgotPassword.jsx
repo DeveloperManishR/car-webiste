@@ -9,7 +9,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 
 // Email Schema
 const emailSchema = z.object({
-  email: z.string().email({ message: "Invalid email address" }),
+  email: z
+    .string()
+    .nonempty({ message: "Email is required" })
+    .email({ message: "Invalid email address" }),
 });
 
 export default function ForgotPassword() {

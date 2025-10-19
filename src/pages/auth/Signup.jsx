@@ -16,15 +16,20 @@ import { zodResolver } from "@hookform/resolvers/zod";
 
 // Step 1 Schema
 const step1Schema = z.object({
-  id: z.string().min(1, { message: "ID is required" }),
+  id: z.string().nonempty("ID is required"),
   fullName: z
     .string()
-    .min(2, { message: "Full name must be at least 2 characters" }),
-  dateOfBirth: z.string().min(1, { message: "Date of birth is required" }),
-  email: z.email({ message: "Invalid email address" }),
+    .nonempty("Full name is required")
+    .min(2, "Full name must be at least 2 characters"),
+  dateOfBirth: z.string().nonempty("Date of birth is required"),
+  email: z
+    .string()
+    .nonempty("Email is required")
+    .email("Invalid email address"),
   telephone: z
     .string()
-    .min(10, { message: "Telephone must be at least 10 characters" }),
+    .nonempty("Telephone is required")
+    .min(10, "Telephone must be at least 10 characters"),
 });
 
 // Step 2 Schema

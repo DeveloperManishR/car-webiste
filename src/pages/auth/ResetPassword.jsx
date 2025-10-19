@@ -12,6 +12,7 @@ const passwordSchema = z
   .object({
     password: z
       .string()
+      .nonempty({ message: "Password is required" })
       .min(8, { message: "Must be at least 8 characters long" })
       .regex(/[0-9]/, { message: "Must have at least one number" })
       .regex(/[a-z]/, { message: "Must have at least one lowercase letter" })
@@ -21,7 +22,7 @@ const passwordSchema = z
       }),
     confirmPassword: z
       .string()
-      .min(1, { message: "Please confirm your password" }),
+      .nonempty({ message: "Please confirm your password" }),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: "Passwords don't match",
