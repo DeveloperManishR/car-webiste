@@ -8,7 +8,7 @@ const AuthLayout = ({ title, children }) => {
           <div className="flex items-center h-full">
             <div className="max-w-[600px] bg-[#002F74]/50 backdrop-blur-lg text-white shadow-2xl rounded-[35px] p-6 sm:p-12 mx-auto md:mx-0 w-full">
               {title && (
-                <h2 className="text-[1.6rem] sm:text-[1.9rem] font-[600] text-center mb-4">
+                <h2 className="text-[1.6rem] sm:text-[2rem] font-[600] text-center mb-4">
                   {title}
                 </h2>
               )}
