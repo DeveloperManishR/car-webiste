@@ -1,12 +1,14 @@
-import { SideBar } from "../common/SideBar";
-import { TopBar } from "../common/TopBar";
+import { SideBar } from "./SideBar";
+import { TopBar } from "./TopBar";
 
 export default function PrivateLayout({ children }) {
   return (
-    <div>
+    <div className="flex h-dvh overflow-hidden">
       <SideBar />
-      <TopBar />
-      {children}
+      <div className="h-full w-full p-8 space-y-4">
+        <TopBar />
+        {children}
+      </div>
     </div>
   );
 }
