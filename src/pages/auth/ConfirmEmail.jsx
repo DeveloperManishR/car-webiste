@@ -1,6 +1,6 @@
 import React from "react";
-import AuthLayout from "../../components/layout/authLayout";
 import { useLocation } from "react-router-dom";
+import AuthLayout from "../../components/layout/AuthLayout";
 
 const ConfirmEmail = () => {
   const { email } = useLocation().state ?? {};

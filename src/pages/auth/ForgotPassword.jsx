@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { MdEmail } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import { z } from "zod";
-import AuthLayout from "../../components/layout/authLayout";
+import AuthLayout from "../../components/layout/AuthLayout";
 import InputField from "../../components/Form/InputField";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
