@@ -1,6 +1,7 @@
 import React from "react";
 import { MdEmail, MdLock } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../hooks/useAuth";
 import { z } from "zod";
 import AuthLayout from "../../components/layout/AuthLayout";
 import InputField from "../../components/Form/InputField";
@@ -20,6 +21,7 @@ const loginSchema = z.object({
 
 export default function LoginPage() {
   const navigate = useNavigate(); // ✅ Correct naming
+  const { login } = useAuth();
 
   const form = useForm({
     resolver: zodResolver(loginSchema),
@@ -29,10 +31,14 @@ export default function LoginPage() {
     },
   });
 
-  const handleSubmit = (data) => {
-    console.log("Form submitted", data);
-    // ✅ Add login logic or navigate after successful login
-    navigate("/");
+  const handleSubmit = async (data) => {
+    try {
+      await login({ email: data.email, password: data.password });
+      navigate("/");
+    } catch (err) {
+      console.log(err);
+      alert("Login failed. Check your credentials.");
+    }
   };
 
   return (

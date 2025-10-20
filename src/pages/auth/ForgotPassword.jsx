@@ -6,6 +6,7 @@ import AuthLayout from "../../components/layout/AuthLayout";
 import InputField from "../../components/Form/InputField";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useAuth } from "../../hooks/useAuth";
 
 // Email Schema
 const emailSchema = z.object({
@@ -19,6 +20,7 @@ export default function ForgotPassword() {
   const navigate = useNavigate();
   const [emailSent, setEmailSent] = useState(false);
   const [sentEmail, setSentEmail] = useState("");
+  const { requestPasswordReset } = useAuth();
 
   const form = useForm({
     resolver: zodResolver(emailSchema),
@@ -27,11 +29,17 @@ export default function ForgotPassword() {
     },
   });
 
-  const handleSubmit = (data) => {
-    console.log("Password reset email sent to:", data.email);
-    setSentEmail(data.email);
-    setEmailSent(true);
-    // Here you would typically send the reset email
+  const handleSubmit = async (data) => {
+    try {
+      await requestPasswordReset(data.email);
+      setSentEmail(data.email);
+      setEmailSent(true);
+    } catch (e) {
+      // API suggests success even if email not registered; still show success
+      console.log(e);
+      setSentEmail(data.email);
+      setEmailSent(true);
+    }
   };
 
   const handleResend = () => {

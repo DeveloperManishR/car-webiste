@@ -13,6 +13,7 @@ import AuthLayout from "../../components/layout/AuthLayout";
 import InputField from "../../components/Form/InputField";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useAuth } from "../../hooks/useAuth";
 
 // Step 1 Schema
 const step1Schema = z.object({
@@ -61,6 +62,7 @@ export default function Signup() {
   const navigate = useNavigate();
   const [step, setStep] = useState(1);
   const acceptTermsRef = useRef(null);
+  const { register } = useAuth();
 
   const [termsAccepted, setTermsAccepted] = useState(false);
   const [termsError, setTermsError] = useState("");
@@ -96,16 +98,30 @@ export default function Signup() {
     setStep(2);
   };
 
-  const handleStep2Submit = (data) => {
+  const handleStep2Submit = async (data) => {
+    console.log(data);
     if (!termsAccepted) {
       setTermsError("Please accept the terms of use to continue.");
       return;
     }
     setTermsError("");
-    console.log("Step 2 data:", data);
-    navigate("/confirm-email", {
-      state: { email: step1Form.getValues("email") ?? "" },
-    });
+    try {
+      const payload = {
+        celular: step1Form.getValues("telephone"),
+        cep: step2Form.getValues("zipCode"),
+        cpf: step1Form.getValues("id"),
+        data_nascimento: step1Form.getValues("dateOfBirth"),
+        email: step1Form.getValues("email"),
+        nome_completo: step1Form.getValues("fullName"),
+        numero_residencia: step2Form.getValues("houseNumber"),
+        password: step2Form.getValues("password"),
+      };
+      await register(payload);
+      navigate("/");
+    } catch (e) {
+      console.log(e);
+      alert("Registration failed. Please check your details.");
+    }
   };
 
   const handleBack = () => {

@@ -1,16 +1,19 @@
 import React from "react";
-
+import { useAuth } from "../../hooks/useAuth";
 export const TopBar = () => {
+  const { user } = useAuth();
   return (
-    <div className="bg-[url('/assets/topBarBg.png')] bg-cover bg-center bg-no-repeat h-40 rounded-3xl flex justify-between">
+    <div className="bg-[url('/assets/topBarBg.png')] bg-cover bg-center bg-no-repeat h-40 rounded-3xl flex justify-between max-w-[860px]">
       <div className="flex flex-col  gap-2 p-6">
-        <div className="flex items-center gap-3">
+        <div className="flex items-center">
           <img src="/assets/user.svg" alt="user" className="size-12" />
-          <p className="text-white font-medium">John Doe</p>
+          <p className="text-white font-medium ms-3 me-1">
+            {user.full_name || user.nome_completo}
+          </p>
           <img
             src="/assets/cart.svg"
             alt="logout"
-            className="size-5 cursor-pointer"
+            className="size-[1.1rem] cursor-pointer"
           />
         </div>
         <div className="flex items-end gap-8">
@@ -20,7 +23,7 @@ export const TopBar = () => {
               R$ 123.52
             </p>
           </div>
-          <button className="bg-white rounded px-3 py-0.5 text-[#194D9A] font-medium mb-1 whitespace-nowrap">
+          <button className="bg-white rounded px-3 py-0.5 text-[#194D9A] font-medium mb-1 whitespace-nowrap cursor-pointer hover:text-[#1AABFE] transition-all duration-300">
             Buy Consultations
           </button>
         </div>

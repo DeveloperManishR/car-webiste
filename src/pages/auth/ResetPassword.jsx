@@ -6,6 +6,7 @@ import AuthLayout from "../../components/layout/AuthLayout";
 import InputField from "../../components/Form/InputField";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useAuth } from "../../hooks/useAuth";
 
 // Password Schema
 const passwordSchema = z
@@ -34,6 +35,7 @@ export default function ResetPassword() {
   const [searchParams] = useSearchParams();
   const [tokenValid, setTokenValid] = useState(false);
   const [loading, setLoading] = useState(true);
+  const { resetPassword } = useAuth();
 
   const form = useForm({
     resolver: zodResolver(passwordSchema),
@@ -52,24 +54,11 @@ export default function ResetPassword() {
       return;
     }
 
-    // Here you would validate the token with your backend
-    // For now, we'll simulate a token validation
     const validateToken = async () => {
       try {
-        // Simulate API call to validate token
-        await new Promise((resolve) => setTimeout(resolve, 1000));
-
-        // In a real app, you would check if the token is valid and not expired
-        // const response = await fetch(`/api/validate-reset-token?token=${token}`);
-        // const isValid = await response.json();
-
-        setTokenValid(true); // For demo purposes, always set to true
-      } catch (error) {
-        console.error("Token validation failed:", error);
-        alert(
-          "Invalid or expired reset link. Please request a new password reset."
-        );
-        navigate("/forgot-password");
+        // Optionally call validate-token endpoint if needed
+        // For now, consider presence of token as enough to show form; backend will enforce validity on submit
+        setTokenValid(true);
       } finally {
         setLoading(false);
       }
@@ -80,23 +69,13 @@ export default function ResetPassword() {
 
   const handleSubmit = async (data) => {
     const token = searchParams.get("token");
-
     try {
-      console.log("Resetting password with token:", token);
-      console.log("New password:", data.password);
-
-      // Here you would send the new password and token to your backend
-      // const response = await fetch("/api/reset-password", {
-      //   method: "POST",
-      //   headers: { "Content-Type": "application/json" },
-      //   body: JSON.stringify({ token, password: data.password })
-      // });
-
+      await resetPassword({ token, newPassword: data.password });
       alert("Password reset successfully!");
       navigate("/login");
     } catch (error) {
-      console.error("Password reset failed:", error);
-      alert("Password reset failed. Please try again.");
+      console.log("Password reset failed", error);
+      alert("Invalid or expired reset link. Please request a new one.");
     }
   };
 

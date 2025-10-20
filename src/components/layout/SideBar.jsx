@@ -13,11 +13,13 @@ import {
   FaSignOutAlt,
 } from "react-icons/fa";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useAuth } from "../../hooks/useAuth";
 
 export const SideBar = () => {
   const [openDropdowns, setOpenDropdowns] = useState({});
   const location = useLocation();
   const navigate = useNavigate();
+  const { logout } = useAuth();
   const toggleDropdown = (item) => {
     setOpenDropdowns((prev) => ({
       ...prev,
@@ -192,7 +194,7 @@ export const SideBar = () => {
           <button
             className="flex items-center gap-2 py-3 px-3 text-white hover:bg-[#1AABFE] cursor-pointer rounded transition-colors w-full"
             onClick={() => {
-              localStorage.removeItem("token");
+              logout();
               navigate("/login");
             }}
           >
