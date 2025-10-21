@@ -3,12 +3,12 @@ import { useAuth } from "../../hooks/useAuth";
 export const TopBar = () => {
   const { user } = useAuth();
   return (
-    <div className="bg-[url('/assets/topBarBg.png')] bg-cover bg-center bg-no-repeat h-40 rounded-3xl flex justify-between max-w-[860px]">
+    <div className="bg-[url('/assets/topBarBg2.png')] bg-cover bg-center bg-no-repeat rounded-3xl flex justify-between max-w-[860px] overflow-hidden ">
       <div className="flex flex-col  gap-2 p-6">
         <div className="flex items-center">
           <img src="/assets/user.svg" alt="user" className="size-12" />
           <p className="text-white font-medium ms-3 me-1">
-            {user.full_name || user.nome_completo}
+            {user?.full_name || user?.nome_completo}
           </p>
           <img
             src="/assets/cart.svg"
@@ -28,7 +28,7 @@ export const TopBar = () => {
           </button>
         </div>
       </div>
-      <div className="lg:w-[390px] lg:max-w-[50%] flex items-end ">
+      <div className=" lg:max-w-[46%] flex items-end mb-1.5">
         <img src="/assets/carVector.svg" alt="top bar logo" className="" />
       </div>
     </div>

@@ -50,6 +50,24 @@ export function AuthProvider({ children }) {
     }
   }, []);
 
+  // Listen for storage changes (when tokens are refreshed by interceptor)
+  useEffect(() => {
+    const handleStorageChange = () => {
+      const stored = readStoredTokens();
+      if (stored?.accessToken && stored?.refreshToken) {
+        setAccessToken(stored.accessToken);
+        setRefreshToken(stored.refreshToken);
+      } else {
+        setAccessToken(null);
+        setRefreshToken(null);
+        setUser(null);
+      }
+    };
+
+    window.addEventListener("storage", handleStorageChange);
+    return () => window.removeEventListener("storage", handleStorageChange);
+  }, []);
+
   const handleLogin = useCallback(async ({ email, password }) => {
     const data = await apiLogin({ email, password });
     const tokens = {

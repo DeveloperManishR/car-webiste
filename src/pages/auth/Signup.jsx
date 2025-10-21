@@ -14,6 +14,7 @@ import InputField from "../../components/Form/InputField";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useAuth } from "../../hooks/useAuth";
+import { toast } from "react-toastify";
 
 // Step 1 Schema
 const step1Schema = z.object({
@@ -63,6 +64,7 @@ export default function Signup() {
   const [step, setStep] = useState(1);
   const acceptTermsRef = useRef(null);
   const { register } = useAuth();
+  const [isLoading, setIsLoading] = useState(false);
 
   const [termsAccepted, setTermsAccepted] = useState(false);
   const [termsError, setTermsError] = useState("");
@@ -105,6 +107,7 @@ export default function Signup() {
       return;
     }
     setTermsError("");
+    setIsLoading(true);
     try {
       const payload = {
         celular: step1Form.getValues("telephone"),
@@ -117,10 +120,13 @@ export default function Signup() {
         password: step2Form.getValues("password"),
       };
       await register(payload);
+      toast.success("Registration successful!");
       navigate("/");
     } catch (e) {
       console.log(e);
-      alert("Registration failed. Please check your details.");
+      toast.error("Registration failed. Please check your details.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -312,14 +318,14 @@ export default function Signup() {
             </button>
             <button
               type="submit"
+              disabled={isLoading}
               className={`w-full py-3 rounded-md transition shadow-lg font-medium ${
-                termsAccepted
+                termsAccepted && !isLoading
                   ? "bg-[#1AABFE] hover:bg-[#1AABFE]/70 text-white cursor-pointer"
                   : "bg-gray-400 text-gray-200 cursor-not-allowed"
               }`}
-              disabled={!termsAccepted}
             >
-              Register
+              {isLoading ? "Registering..." : "Register"}
             </button>
           </div>
 

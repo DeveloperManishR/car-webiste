@@ -7,6 +7,7 @@ import InputField from "../../components/Form/InputField";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useAuth } from "../../hooks/useAuth";
+import { toast } from "react-toastify";
 
 // Email Schema
 const emailSchema = z.object({
@@ -20,6 +21,7 @@ export default function ForgotPassword() {
   const navigate = useNavigate();
   const [emailSent, setEmailSent] = useState(false);
   const [sentEmail, setSentEmail] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const { requestPasswordReset } = useAuth();
 
   const form = useForm({
@@ -30,15 +32,20 @@ export default function ForgotPassword() {
   });
 
   const handleSubmit = async (data) => {
+    setIsLoading(true);
     try {
       await requestPasswordReset(data.email);
       setSentEmail(data.email);
       setEmailSent(true);
+      toast.success("Password reset instructions sent to your email!");
     } catch (e) {
       // API suggests success even if email not registered; still show success
       console.log(e);
       setSentEmail(data.email);
       setEmailSent(true);
+      toast.success("Password reset instructions sent to your email!");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -102,9 +109,14 @@ export default function ForgotPassword() {
 
         <button
           type="submit"
-          className="w-full bg-[#1AABFE] hover:bg-[#1AABFE]/70 text-white font-medium py-3 rounded-md transition mt-2 shadow-lg cursor-pointer"
+          disabled={isLoading}
+          className={`w-full font-medium py-3 rounded-md transition mt-2 shadow-lg ${
+            isLoading
+              ? "bg-gray-400 text-gray-200 cursor-not-allowed"
+              : "bg-[#1AABFE] hover:bg-[#1AABFE]/70 text-white cursor-pointer"
+          }`}
         >
-          Send Reset Link
+          {isLoading ? "Sending..." : "Send Reset Link"}
         </button>
 
         <p className="text-center text-[0.8rem] mt-4 md:mt-3">

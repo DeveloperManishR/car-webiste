@@ -7,6 +7,7 @@ import InputField from "../../components/Form/InputField";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useAuth } from "../../hooks/useAuth";
+import { toast } from "react-toastify";
 
 // Password Schema
 const passwordSchema = z
@@ -35,6 +36,7 @@ export default function ResetPassword() {
   const [searchParams] = useSearchParams();
   const [tokenValid, setTokenValid] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const { resetPassword } = useAuth();
 
   const form = useForm({
@@ -69,13 +71,16 @@ export default function ResetPassword() {
 
   const handleSubmit = async (data) => {
     const token = searchParams.get("token");
+    setIsSubmitting(true);
     try {
       await resetPassword({ token, newPassword: data.password });
-      alert("Password reset successfully!");
+      toast.success("Password reset successfully!");
       navigate("/login");
     } catch (error) {
       console.log("Password reset failed", error);
-      alert("Invalid or expired reset link. Please request a new one.");
+      toast.error("Invalid or expired reset link. Please request a new one.");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -129,9 +134,14 @@ export default function ResetPassword() {
 
         <button
           type="submit"
-          className="w-full bg-[#1AABFE] hover:bg-[#1AABFE]/70 text-white font-medium py-3 rounded-md transition mt-2 shadow-lg cursor-pointer"
+          disabled={isSubmitting}
+          className={`w-full font-medium py-3 rounded-md transition mt-2 shadow-lg ${
+            isSubmitting
+              ? "bg-gray-400 text-gray-200 cursor-not-allowed"
+              : "bg-[#1AABFE] hover:bg-[#1AABFE]/70 text-white cursor-pointer"
+          }`}
         >
-          Reset Password
+          {isSubmitting ? "Resetting..." : "Reset Password"}
         </button>
 
         <p className="text-center text-[0.8rem] mt-4 md:mt-3">

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { MdEmail, MdLock } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
@@ -7,6 +7,7 @@ import AuthLayout from "../../components/layout/AuthLayout";
 import InputField from "../../components/Form/InputField";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { toast } from "react-toastify";
 
 const loginSchema = z.object({
   email: z
@@ -20,8 +21,9 @@ const loginSchema = z.object({
 });
 
 export default function LoginPage() {
-  const navigate = useNavigate(); // ✅ Correct naming
+  const navigate = useNavigate();
   const { login } = useAuth();
+  const [isLoading, setIsLoading] = useState(false);
 
   const form = useForm({
     resolver: zodResolver(loginSchema),
@@ -32,12 +34,16 @@ export default function LoginPage() {
   });
 
   const handleSubmit = async (data) => {
+    setIsLoading(true);
     try {
       await login({ email: data.email, password: data.password });
+      toast.success("Login successful!");
       navigate("/");
     } catch (err) {
       console.log(err);
-      alert("Login failed. Check your credentials.");
+      toast.error("Login failed. Please check your credentials.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -64,9 +70,14 @@ export default function LoginPage() {
 
         <button
           type="submit"
-          className="w-full bg-[#1AABFE] hover:bg-[#1AABFE]/70 text-white font-medium py-3 rounded-md transition mt-2 shadow-lg cursor-pointer"
+          disabled={isLoading}
+          className={`w-full font-medium py-3 rounded-md transition mt-2 shadow-lg ${
+            isLoading
+              ? "bg-gray-400 text-gray-200 cursor-not-allowed"
+              : "bg-[#1AABFE] hover:bg-[#1AABFE]/70 text-white cursor-pointer"
+          }`}
         >
-          Login
+          {isLoading ? "Logging in..." : "Login"}
         </button>
 
         <p className="text-center text-[0.8rem] mt-4 md:mt-6">

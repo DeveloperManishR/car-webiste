@@ -6,3 +6,18 @@
     font-weight: 300;
   }
 }
+
+.custom-scrollbar {
+  &::-webkit-scrollbar {
+    width: 6px;
+    border-radius: 6px;
+  }
+  &::-webkit-scrollbar-track {
+    background: #09529c;
+    border-radius: 6px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: #1aabfe;
+    border-radius: 6px;
+  }
+}
