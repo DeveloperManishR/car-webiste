@@ -1,7 +1,24 @@
-import React from "react";
+import React, { useState } from "react";
+import MainContent from "../components/layout/MainContent";
+import Consultation from "../components/Consultation/Consultation";
 
-const Consultation = () => {
-  return <div className="border-2 border-red-500 h-[calc(100vh-260px)]"></div>;
+const ConsultationPage = () => {
+  const menuItems = [
+    { label: "Single Consultation", value: "single" },
+    { label: "Multiple Consultation", value: "multiple" },
+  ];
+
+  const [activeMenu, setActiveMenu] = useState(menuItems[0]?.value);
+  return (
+    <MainContent
+      showMenu={true}
+      menuItems={menuItems}
+      activeItem={activeMenu}
+      setActiveItem={setActiveMenu}
+    >
+      <Consultation activeMenu={activeMenu} />
+    </MainContent>
+  );
 };
 
-export default Consultation;
+export default ConsultationPage;

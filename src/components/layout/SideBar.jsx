@@ -143,7 +143,9 @@ export const SideBar = () => {
                           ? "mt-0.5 border-b-2 border-transparent group-hover:border-[#1AABFE] transition-all duration-300"
                           : ""
                       }
-                    ${isActive(item.path) ? "border-b-2 border-[#1AABFE]" : ""}
+                    ${
+                      isActive(item.path) ? "!border-b-2 !border-[#1AABFE]" : ""
+                    }
                     `}
                     >
                       {item.label}
@@ -179,7 +181,7 @@ export const SideBar = () => {
                           <span
                             className={`mt-0.5 text-[0.95rem] font-medium border-b-2 border-transparent group-hover:border-[#1AABFE] transition-all duration-300 ${
                               isActive(subItem.path)
-                                ? "border-b-2 border-[#1AABFE]"
+                                ? "border-b-2 !border-[#1AABFE]"
                                 : ""
                             }`}
                           >
